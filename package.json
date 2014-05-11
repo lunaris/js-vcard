@@ -1,0 +1,10 @@
+{
+  "name": "js-vcard",
+  "description": "A simple HATEOAS server.",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "body-parser": "*",
+    "express": "3.x"
+  }
+}
