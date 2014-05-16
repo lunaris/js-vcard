@@ -46,8 +46,11 @@ var allStates = {
   root: function(vcard) {
     return {
       actions: function() {
-        var actions = ['getExample', 'postApplication'];
-        if (typeof vcard !== 'undefined') {
+        var actions = ['getExample'];
+        if (vcard !== undefined) {
+          actions.push('getVcard');
+        }
+        else {
           actions.push('getVcard');
         }
 
@@ -102,18 +105,23 @@ var linksFor = function(req, actions) {
   return links;
 };
 
-app.use(bodyParser());
-for (var name in allActions) {
-  var action = allActions[name];
-  app[action.method]('/' + action.path, function(req, res) {
-    var resource = action.handler(req);
+var makeActionHandler = function(action) {
+  return function(req, res) {
+    var resource = action.handler(req) || {};
 
     currentState = currentState.transition(action, resource);
     var actions = currentState.actions();
 
     resource._links = linksFor(req, actions);
     res.send(resource);
-  });
+  };
+};
+
+app.use(bodyParser());
+
+for (var name in allActions) {
+  var action = allActions[name];
+  app[action.method]('/' + action.path, makeActionHandler(action));
 }
 
 app.listen(3000);
