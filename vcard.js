@@ -25,6 +25,9 @@ var allActions = {
       email: 'user@example.com'
     };
   }),
+  postApplication: post('Applications', 'application', function(req) {
+
+  }),
   putPersonalDetails: put('PersonalDetails', 'personal-details', function(req) {
     vcard = {
       forename: req.body.forename,
